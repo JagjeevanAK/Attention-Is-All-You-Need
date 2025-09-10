@@ -11,4 +11,5 @@ class ResidualConnection(nn.Module):
         self.norm = LayerNormalization(features)
 
     def forward(self, x, sublayer):
-        return x + self.dropout(sublayer(self.norm(x)))
+        # Post-LN as per original paper: LayerNorm(x + sublayer(x))
+        return self.norm(x + self.dropout(sublayer(x)))
